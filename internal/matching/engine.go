@@ -199,7 +199,7 @@ func (e *Engine) executeTrade(trade domain.Trade) error {
 	baseAsset := "BTC"
 	quoteAsset := "BRL"
 
-	totalQuoteAmount := (trade.Price * trade.Quantity) / 100000000
+	totalQuoteAmount := (trade.Price * trade.Quantity) / domain.Satoshi
 
 	if err := e.accountService.TransferLockedFunds(trade.SellerID, trade.BuyerID, baseAsset, trade.Quantity); err != nil {
 		return fmt.Errorf("failed to transfer %s: %v", baseAsset, err)
@@ -236,7 +236,7 @@ func (e *Engine) validateOrder(order *domain.Order) error {
 // lockRequiredFunds locks the required funds for an order
 func (e *Engine) lockRequiredFunds(order *domain.Order) error {
 	if order.Side == domain.Buy {
-		totalAmount := (order.Price * order.Quantity) / 100000000
+		totalAmount := (order.Price * order.Quantity) / domain.Satoshi
 		return e.accountService.LockFunds(order.AccountID, "BRL", totalAmount)
 	} else {
 		return e.accountService.LockFunds(order.AccountID, "BTC", order.Quantity)
@@ -246,7 +246,7 @@ func (e *Engine) lockRequiredFunds(order *domain.Order) error {
 // unlockOrderFunds unlocks the locked funds for an order
 func (e *Engine) unlockOrderFunds(order *domain.Order) error {
 	if order.Side == domain.Buy {
-		remainingValue := (order.Price * order.Remaining) / 100000000
+		remainingValue := (order.Price * order.Remaining) / domain.Satoshi
 		return e.accountService.UnlockFunds(order.AccountID, "BRL", remainingValue)
 	} else {
 		return e.accountService.UnlockFunds(order.AccountID, "BTC", order.Remaining)
