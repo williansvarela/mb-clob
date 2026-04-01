@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-// satoshi is the smallest unit of Bitcoin (1 BTC = 100 million satoshis)
-const satoshi int32 = 100000000
+// Satoshi is the smallest unit of Bitcoin (1 BTC = 100 million satoshis)
+const Satoshi int64 = 100000000
 
 // Side represents the side of an order (buy or sell)
 type Side int
