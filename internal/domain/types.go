@@ -107,3 +107,11 @@ type Account struct {
 	ID       string             `json:"id"`
 	Balances map[string]Balance `json:"balances"`
 }
+
+
+// OrderBookSnapshot represents a snapshot of the order book at a given time
+type OrderBookSnapshot struct {
+	BuyOrders  []Order   `json:"buy_orders"`
+	SellOrders []Order   `json:"sell_orders"`
+	Timestamp  time.Time `json:"timestamp"`
+}
