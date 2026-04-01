@@ -53,7 +53,7 @@ func setupInitialData(exchangeService *exchange.Service) error {
 	fmt.Println("\nSetting up initial demo data...")
 
 	// Create example accounts
-	accounts := []string{"alice", "bob", "charlie", "diana"}
+	accounts := []string{"alice", "pedro", "bruno", "diana"}
 
 	for _, accountID := range accounts {
 		if err := exchangeService.CreateAccount(accountID); err != nil {
@@ -86,15 +86,15 @@ func setupInitialData(exchangeService *exchange.Service) error {
 	}
 
 	// Bob: Buy orders
-	if _, err := exchangeService.PlaceOrder("bob", domain.Buy, 29000000, 15000000); err != nil { // Buy 0.15 BTC at R$ 290,000
+	if _, err := exchangeService.PlaceOrder("pedro", domain.Buy, 29000000, 15000000); err != nil { // Buy 0.15 BTC at R$ 290,000
 		return fmt.Errorf("failed to place Bob's buy order: %v", err)
 	}
-	if _, err := exchangeService.PlaceOrder("bob", domain.Buy, 28500000, 20000000); err != nil { // Buy 0.2 BTC at R$ 285,000
+	if _, err := exchangeService.PlaceOrder("pedro", domain.Buy, 28500000, 20000000); err != nil { // Buy 0.2 BTC at R$ 285,000
 		return fmt.Errorf("failed to place Bob's buy order: %v", err)
 	}
 
 	// Charlie: Mix of orders
-	if _, err := exchangeService.PlaceOrder("charlie", domain.Buy, 29500000, 10000000); err != nil { // Buy 0.1 BTC at R$ 295,000
+	if _, err := exchangeService.PlaceOrder("bruno", domain.Buy, 29500000, 10000000); err != nil { // Buy 0.1 BTC at R$ 295,000
 		return fmt.Errorf("failed to place Charlie's buy order: %v", err)
 	}
 

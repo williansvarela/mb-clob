@@ -8,7 +8,7 @@ This is a simplified matching engine designed to handle cryptocurrency trading o
 
 ## 🏗️ Architecture
 
-The system follows a clean architecture pattern with separated concerns:
+The system follows a architecture pattern with separated concerns:
 
 ```
 mb-clob/
@@ -70,7 +70,7 @@ The server will start on `http://localhost:8080` with demo accounts and initial 
 ### Initial Demo Data
 
 The application automatically sets up demo accounts with initial balances:
-- **Accounts**: `alice`, `bob`, `charlie`, `diana`
+- **Accounts**: `alice`, `pedro`, `bruno`, `diana`
 - **Initial BTC Balance**: 1.0 BTC per account
 - **Initial BRL Balance**: R$ 150,000 per account
 - **Sample Orders**: Pre-placed orders to demonstrate the order book
@@ -163,7 +163,7 @@ curl http://localhost:8080/orderbook
 4. **Check account balances**:
    ```bash
    curl http://localhost:8080/balances/alice/BTC
-   curl http://localhost:8080/balances/bob/BRL
+   curl http://localhost:8080/balances/pedro/BRL
    ```
 
 5. **Place a test order** (Alice sells 0.1 BTC at R$ 300,000):
@@ -177,14 +177,13 @@ curl http://localhost:8080/orderbook
    ```bash
    curl -X POST http://localhost:8080/orders \
      -H "Content-Type: application/json" \
-     -d '{"account_id": "bob", "side": 0, "price": 30000000, "quantity": 10000000}'
+     -d '{"account_id": "pedro", "side": 0, "price": 30000000, "quantity": 10000000}'
    ```
 
 7. **Verify trade execution**:
    ```bash
-   curl http://localhost:8080/trades
    curl http://localhost:8080/balances/alice/BTC
-   curl http://localhost:8080/balances/bob/BTC
+   curl http://localhost:8080/balances/pedro/BTC
    ```
 
 ### Expected Behavior
@@ -192,7 +191,6 @@ curl http://localhost:8080/orderbook
 - Orders should match when buy price ≥ sell price
 - Balances should update automatically after trades
 - Order book should reflect current pending orders
-- Trade history should show completed transactions
 
 ## 📝 Assumptions
 
@@ -244,12 +242,6 @@ The system includes comprehensive error handling for:
 
 ## 🎨 Design Decisions
 
-### Why Go?
-- **Performance**: Excellent concurrent processing capabilities
-- **Simplicity**: Clean syntax and built-in concurrency primitives
-- **Memory Safety**: Garbage collection prevents memory leaks
-- **Standard Library**: Rich HTTP and JSON support out of the box
-
 ### Why Integer Arithmetic?
 - **Precision**: Avoids floating-point rounding errors
 - **Consistency**: Ensures exact calculations for financial operations
@@ -265,7 +257,7 @@ The system includes comprehensive error handling for:
 - **Performance**: Maximum speed for high-frequency trading
 - **Simplicity**: No database configuration or management
 - **Demonstration**: Suitable for prototyping and demonstration
-- **Future Extension**: Can be easily extended with persistent storage
+- **Future Extension**: Can be extended with persistent storage
 
 ## 🔄 Order States and Lifecycle
 
@@ -302,6 +294,16 @@ go fmt ./...
 # Run tests (when available)
 go test ./...
 ```
+
+## 🔮 Future Enhancements
+
+- **Persistent Storage**: Add database integration for data persistence
+- **WebSocket API**: Real-time order book and trade streams
+- **Multiple Trading Pairs**: Support for various cryptocurrency pairs
+- **Rate Limiting**: API rate limiting and abuse prevention
+- **Observability and Monitoring**: Add observability tool integration
+- **Unit Tests**: Comprehensive test coverage
+- **Authentication**: User authentication and authorization
 
 ## 📄 License
 
