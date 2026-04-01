@@ -95,7 +95,6 @@ func (s *Server) setupRoutes() {
 
 // Start launches the HTTP API server on the specified port.
 func (s *Server) Start(port string) error {
-	slog.Info("Starting API server", "port", port)
 	return http.ListenAndServe(":"+port, s.mux)
 }
 
