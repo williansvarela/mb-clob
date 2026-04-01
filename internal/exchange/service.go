@@ -3,6 +3,7 @@ package exchange
 
 import (
 	"fmt"
+	"log/slog"
 	"time"
 
 	"github.com/williansvarela/mb-clob/internal/account"
@@ -39,13 +40,13 @@ func NewService(instrument string) *Service {
 
 // Start starts the exchange service (matching engine)
 func (s *Service) Start() {
-	fmt.Printf("Starting exchange service for instrument %s\n", s.instrument)
+	slog.Info("Starting exchange service", "instrument", s.instrument)
 	s.matchingEngine.Start()
 }
 
 // Stop stops the exchange service (matching engine)
 func (s *Service) Stop() {
-	fmt.Printf("Stopping exchange service for instrument %s\n", s.instrument)
+	slog.Info("Stopping exchange service", "instrument", s.instrument)
 	s.matchingEngine.Stop()
 }
 
@@ -67,7 +68,7 @@ func (s *Service) Deposit(accountID, asset string, amount int64) error {
 
 	err := s.accountService.Credit(accountID, asset, amount)
 	if err == nil {
-		fmt.Printf("Deposited %d %s to account %s\n", amount, asset, accountID)
+		slog.Info("Deposited funds", "amount", amount, "asset", asset, "account", accountID)
 	}
 	return err
 }
@@ -80,7 +81,7 @@ func (s *Service) Withdraw(accountID, asset string, amount int64) error {
 
 	err := s.accountService.Debit(accountID, asset, amount)
 	if err == nil {
-		fmt.Printf("Withdrawn %d %s from account %s\n", amount, asset, accountID)
+		slog.Info("Withdrawn funds", "amount", amount, "asset", asset, "account", accountID)
 	}
 	return err
 }
@@ -101,8 +102,7 @@ func (s *Service) PlaceOrder(accountID string, side domain.Side, price, quantity
 		return nil, err
 	}
 
-	fmt.Printf("Order placed: %s %s %d@%d by account %s\n",
-		order.ID, side, quantity, price, accountID)
+	slog.Info("Order placed", "order_id", order.ID, "side", side, "quantity", quantity, "price", price, "account", accountID)
 
 	return order, nil
 }
@@ -111,7 +111,7 @@ func (s *Service) PlaceOrder(accountID string, side domain.Side, price, quantity
 func (s *Service) CancelOrder(orderID string) error {
 	err := s.matchingEngine.CancelOrder(orderID)
 	if err == nil {
-		fmt.Printf("Order cancelled: %s\n", orderID)
+		slog.Info("Order cancelled", "order_id", orderID)
 	}
 	return err
 }
@@ -143,8 +143,7 @@ func (s *Service) GetTrades() []domain.Trade {
 
 // onTrade is called when a trade is executed
 func (s *Service) onTrade(trade domain.Trade) {
-	fmt.Printf("Trade executed: %s - %d@%d between %s and %s\n",
-		trade.ID, trade.Quantity, trade.Price, trade.BuyerID, trade.SellerID)
+	slog.Info("Trade executed", "trade_id", trade.ID, "quantity", trade.Quantity, "price", trade.Price, "buyer", trade.BuyerID, "seller", trade.SellerID)
 }
 
 // generateOrderID generates a unique ID for an order
