@@ -12,7 +12,7 @@ The system follows a architecture pattern with separated concerns:
 
 ```
 mb-clob/
-├── cmd/                    # Application entry point
+├── cmd/                   # Application entry point
 │   └── main.go            # Main server and demo setup
 ├── internal/              # Application core
 │   ├── api/               # HTTP server and handlers
@@ -66,6 +66,41 @@ go run cmd/main.go
 ```
 
 The server will start on `http://localhost:8080` with demo accounts and initial orders pre-loaded.
+
+## Docker
+
+### Docker Build
+
+Build the Docker image using make
+
+```bash
+make docker-build
+```
+
+or directly:
+
+```bash
+docker build -t IMAGE_NAME .
+```
+
+### Running with Docker
+
+```bash
+# Run container in foreground
+make docker-run
+
+# Run container in background
+make docker-run-bg
+```
+
+### Stop and Clean
+```bash
+# Stop container
+make docker-stop
+
+# Clean all Docker resources
+make docker-clean
+```
 
 ### Initial Demo Data
 
@@ -195,7 +230,7 @@ curl http://localhost:8080/orderbook
 ## 📝 Assumptions
 
 - **Instrument**: The system assume instrument is always 'BTC/BRL'.
-- **Single Asset Pair**: This implementation focuses on one pair (e.g., BTC/USD).
+- **Single Asset Pair**: This implementation focuses on one pair (e.g., BTC/BRL).
 
 ## 🔧 Implementation Details
 
@@ -287,12 +322,6 @@ make clean
 
 # Run with Go directly
 go run cmd/main.go
-
-# Check code formatting
-go fmt ./...
-
-# Run tests (when available)
-go test ./...
 ```
 
 ## 🔮 Future Enhancements
