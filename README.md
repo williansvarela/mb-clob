@@ -327,6 +327,8 @@ go run cmd/main.go
 ## 🔮 Future Enhancements
 
 - **Persistent Storage**: Add database integration for data persistence
+- **Self-Trade Prevention**: Logic to reject orders where the Maker and Taker are the same AccountID.
+- **Market Orders**: Adding support for orders that execute immediately at the best available price.
 - **WebSocket API**: Real-time order book and trade streams
 - **Multiple Trading Pairs**: Support for various cryptocurrency pairs
 - **Rate Limiting**: API rate limiting and abuse prevention
