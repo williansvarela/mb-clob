@@ -37,10 +37,12 @@ type WithdrawRequest struct {
 
 // PlaceOrderRequest represents a request to place a new order in the exchange.
 type PlaceOrderRequest struct {
-	AccountID string     `json:"account_id"`
-	Side      domain.Side `json:"side"`
-	Price     int64      `json:"price"`
-	Quantity  int64      `json:"quantity"`
+	AccountID string           `json:"account_id"`
+	Side      domain.Side      `json:"side"`
+	Price     int64            `json:"price"`
+	Quantity  int64            `json:"quantity"`
+	Type      domain.OrderType `json:"type"`
+	Symbol    string           `json:"symbol"`
 }
 
 // CancelOrderRequest represents a request to cancel an existing order.
@@ -56,7 +58,7 @@ type ErrorResponse struct {
 // SuccessResponse represents a successful response from the API.
 type SuccessResponse struct {
 	Success bool        `json:"success"`
-	Data    any 		`json:"data,omitempty"`
+	Data    any         `json:"data,omitempty"`
 }
 
 
@@ -278,7 +280,7 @@ func (s *Server) placeOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	order, err := s.exchangeService.PlaceOrder(req.AccountID, req.Side, req.Price, req.Quantity)
+	order, err := s.exchangeService.PlaceOrder(req.AccountID, req.Side, req.Price, req.Quantity, req.Type, req.Symbol)
 	if err != nil {
 		s.writeError(w, http.StatusBadRequest, err.Error())
 		return

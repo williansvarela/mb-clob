@@ -230,6 +230,15 @@ func (e *Engine) validateOrder(order *domain.Order) error {
 	if order.Side != domain.Buy && order.Side != domain.Sell {
 		return fmt.Errorf("invalid order side")
 	}
+	if order.Type != domain.Limit {
+		return fmt.Errorf("Unsupported order type: only limit orders are supported for now")
+	}
+	if order.Symbol == "" {
+		return fmt.Errorf("symbol cannot be empty")
+	}
+	if order.Symbol != "BTC/BRL" {
+		return fmt.Errorf("unsupported symbol: only BTC/BRL is supported for now")
+	}
 	return nil
 }
 

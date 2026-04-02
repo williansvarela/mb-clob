@@ -87,7 +87,7 @@ func (s *Service) Withdraw(accountID, asset string, amount int64) error {
 }
 
 // PlaceOrder places a new order in the system
-func (s *Service) PlaceOrder(accountID string, side domain.Side, price, quantity int64) (*domain.Order, error) {
+func (s *Service) PlaceOrder(accountID string, side domain.Side, price, quantity int64, orderType domain.OrderType, symbol string) (*domain.Order, error) {
 	order := &domain.Order{
 		ID:        generateOrderID(),
 		AccountID: accountID,
@@ -95,6 +95,8 @@ func (s *Service) PlaceOrder(accountID string, side domain.Side, price, quantity
 		Price:     price,
 		Quantity:  quantity,
 		Timestamp: time.Now(),
+		Type:      orderType,
+		Symbol:    symbol,
 	}
 
 	err := s.matchingEngine.SubmitOrder(order)
