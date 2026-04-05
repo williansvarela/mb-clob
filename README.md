@@ -251,7 +251,7 @@ The system uses integer arithmetic to avoid floating-point precision issues:
 
 The matching engine implements **Price-Time Priority**:
 
-1. **Algorithmic Complexity:**: The order book utilizes **Heaps** (Max-Heap for Bids, Min-Heap for Asks). This provides **O(1)** access to the "Best" price (top of the book) and **O(log N)** complexity for order insertions and cancellations.
+1. **Algorithmic Complexity:**: The order book utilizes **Heaps** (Max-Heap for Bids, Min-Heap for Asks). This provides **O(1)** access to the "Best" price (top of the book) and **$O(log^N)$** complexity for order insertions and cancellations.
 2. **Price Priority**: Better prices are matched first
    - Buy orders: Higher prices have priority
    - Sell orders: Lower prices have priority
@@ -259,6 +259,11 @@ The matching engine implements **Price-Time Priority**:
 3. **Time Priority**: Among orders at the same price, earlier orders are matched first
 
 4. **Partial Fills**: Large orders can be filled by multiple smaller orders
+
+### Locked Funds Mechanism (Prevention of Double-Spending)
+- **Order Placement**: When a user places a Buy order for R$ 10,000, the account service immediately moves that amount from `Available` to `Locked`
+- **Safety**: This prevents a user from "double-spending" their balance by placing multiple orders that exceed their total holdings
+- **Resolution**: Funds are only deducted from the account upon trade execution or released back to `Available` if the order is cancelled
 
 ### Concurrency Model
 
@@ -277,6 +282,13 @@ The system includes comprehensive error handling for:
 - Graceful shutdown handling
 
 ## 🎨 Design Decisions
+
+### Why use Heap Data Structure?
+The order book utilizes Heaps (via Go's container/heap package) to manage the internal order queues for both sides of the book:
+- **Efficient Access (O(1))**: The matching engine needs to frequently "peek" at the "Top of the Book" (the highest bid and lowest ask). A heap provides immediate constant-time access to these best-priced orders
+- **Logarithmic Complexity ($O(log^N)$)**: Every time a new order is added or a cancellation occurs, the heap re-orders itself in logarithmic time. This is significantly faster than maintaining a fully sorted array (O(N)) as the order book grows
+- **Embedded Priority Logic**: The `Less` function in the heap implementation natively handles the multi-level sorting required for Price-Time priority: it first compares prices and then uses the `Timestamp` as a tie-breaker to ensure FIFO (First-In, First-Out) for identical prices
+- **Memory Efficiency**: The implementation uses slices to represent the heaps (`BuyOrderHeap` and `SellOrderHeap`), which offers better cache locality and lower memory overhead compared to pointer-heavy balanced binary search trees
 
 ### Why Integer Arithmetic?
 - **Precision**: Avoids floating-point rounding errors
