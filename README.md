@@ -251,13 +251,14 @@ The system uses integer arithmetic to avoid floating-point precision issues:
 
 The matching engine implements **Price-Time Priority**:
 
-1. **Price Priority**: Better prices are matched first
+1. **Algorithmic Complexity:**: The order book utilizes **Heaps** (Max-Heap for Bids, Min-Heap for Asks). This provides **O(1)** access to the "Best" price (top of the book) and **O(log N)** complexity for order insertions and cancellations.
+2. **Price Priority**: Better prices are matched first
    - Buy orders: Higher prices have priority
    - Sell orders: Lower prices have priority
 
-2. **Time Priority**: Among orders at the same price, earlier orders are matched first
+3. **Time Priority**: Among orders at the same price, earlier orders are matched first
 
-3. **Partial Fills**: Large orders can be filled by multiple smaller orders
+4. **Partial Fills**: Large orders can be filled by multiple smaller orders
 
 ### Concurrency Model
 
